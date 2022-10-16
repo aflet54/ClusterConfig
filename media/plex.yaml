@@ -66,12 +66,8 @@ metadata:
   labels:
     app: plex
 spec:
-  type: NodePort
   ports:
     - port: 32400
       targetPort: plex-port
-      protocol: TCP
-      name: plex-service-port
-      # nodePort: 30007
   selector:
     app: plex
