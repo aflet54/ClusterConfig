@@ -47,13 +47,13 @@ spec:
                 volumeMounts:
                   - name: mediaserver-volume
                     mountPath: "/config"
-                    subpath: "config/plex"
+                    subpath: config/plex
                   - name: mediaserver-volume
                     mountPath: "/moives"
-                    subpath: "moives"
+                    subpath: moives
                   - name: mediaserver-volume
                     mountPath: "/tv"
-                    subpath: "tv"
+                    subpath: tv
                 resources:
                     
 ---
