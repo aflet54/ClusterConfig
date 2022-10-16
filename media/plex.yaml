@@ -29,8 +29,8 @@ spec:
             volumes:
               - name: mediaserver-volume
                 nfs:
-                    server: homenas
-                    path: /media
+                    server: Homenas
+                    path: "/media"
             containers:
               - name: plex
                 image: "docker.io/linuxserver/plex:latest"
