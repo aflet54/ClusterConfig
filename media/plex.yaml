@@ -49,11 +49,11 @@ spec:
                     mountPath: "/config"
                     subPath: config/plex
                   - name: mediaserver-volume
-                    mountPath: "/moives"
-                    subPath: moives
+                    mountPath: "/movies"
+                    subPath: Movies
                   - name: mediaserver-volume
-                    mountPath: "/tv"
-                    subPath: tv
+                    mountPath: "/TV"
+                    subPath: TV
                 resources:
                     
 ---
