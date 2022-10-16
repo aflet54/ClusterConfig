@@ -29,7 +29,7 @@ spec:
             volumes:
               - name: mediaserver-volume
                 nfs:
-                    server: Homenas
+                    server: 192.168.1.50
                     path: "/media"
             containers:
               - name: plex
