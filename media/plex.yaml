@@ -55,6 +55,12 @@ spec:
                     mountPath: "/TV"
                     subPath: TV
                 resources:
+                  requests: 
+                    memory: "256Mi"
+                    cpu: "250m"
+                  limit:
+                    memory: "2048Mi"
+                    cpu: "500m"
                     
 ---
 ### Service
