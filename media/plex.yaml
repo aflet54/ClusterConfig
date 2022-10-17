@@ -76,18 +76,18 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-   name: plex-ingress
-   nginx.ingress.kubernetes.io/rewrite-target: /$1
-   namespace: mediaserver-system
+  name: plex-ingress
+  nginx.ingress.kubernetes.io/rewrite-target: /
+  namespace: mediaserver-system
 spec:
-    rules:
-      - host: plex.ocnathor.com
-        http:
-          paths:
-            - path: /
-              pathType: Prefix
-              backend:
-                service:
-                  name: plex-service
-                  port:
-                    number: 8080
+  rules:
+  - host: plex.ocnathor.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: plex-service
+            port:
+              number: 8080
