@@ -77,8 +77,9 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: plex-ingress
-  nginx.ingress.kubernetes.io/rewrite-target: /
   namespace: mediaserver-system
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
   - host: plex.ocnathor.com
