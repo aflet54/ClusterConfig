@@ -72,32 +72,33 @@ metadata:
   labels:
     app: plex
 spec:
+  type: LoadBalancer
   ports:
     - port: 32400
-      targetPort: plex-port
+      targetPort: plex-port 
   externalIPs:
     - 192.168.1.130
   selector:
     app: plex
 ---
 ### Ingress / External Access Path
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: plex-ingress
-  namespace: mediaserver-system
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-    kubernetes.io/ingress.class: "nginx"
-spec:
-  rules:
-  - host: plex.ocnathor.com
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: plex-service
-            port:
-              number: 8080
+#apiVersion: networking.k8s.io/v1
+#kind: Ingress
+#metadata:
+#  name: plex-ingress
+#  namespace: mediaserver-system
+#  annotations:
+#    nginx.ingress.kubernetes.io/rewrite-target: /
+#    kubernetes.io/ingress.class: "nginx"
+#spec:
+#  rules:
+#  - host: plex.ocnathor.com
+#    http:
+#      paths:
+#      - path: /
+#        pathType: Prefix
+#        backend:
+#          service:
+#            name: plex-service
+#            port:
+#              number: 8080
