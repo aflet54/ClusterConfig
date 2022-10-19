@@ -29,8 +29,10 @@ spec:
             volumes:
               - name: mediaserver-volume
                 nfs:
-                    server: 192.168.1.50
-                    path: "/mnt/MainPool/media"
+#                    server: 192.168.1.50
+                    server: 192.168.1.68
+#                    path: "/mnt/MainPool/media"
+                    path: "/volume1/Data"
             containers:
               - name: plex
                 image: "docker.io/linuxserver/plex:latest"
@@ -47,7 +49,7 @@ spec:
                 volumeMounts:
                   - name: mediaserver-volume
                     mountPath: "/config"
-                    subPath: config/plex
+                    subPath: Config/Plex
                   - name: mediaserver-volume
                     mountPath: "/Movies"
                     subPath: Movies
