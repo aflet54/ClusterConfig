@@ -1,0 +1,97 @@
+### Config Map
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: sonarr-config
+    namespace: mediaserver-system
+data:
+    PGID: "1000"
+    PUID: "1000"
+    TZ: "Australia/Brisbane"
+---
+### Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarr-deployment
+  namespace: mediaserver-system
+  labels:
+    app: sonarr
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: sonarr
+    template:
+        metadata:
+            labels:
+                app: sonarr
+        spec:
+            volumes:
+              - name: mediaserver-volume
+                nfs:
+                    server: 192.168.1.68
+                    path: "/volume1/Data"
+            containers:
+              - name: sonarr
+ # https://hub.docker.com/r/linuxserver/sonarr
+                image: "docker.io/linuxserver/sonarr:latest"
+                imagePullPolicy: Always
+                readinessProbe:
+                    tcpSocket:
+                        port: 8989
+                    initialDelaySeconds: 20
+                    periodSeconds: 15
+                ports:  
+                  - name: sonarr-port
+                    containerPort: 8989
+                    protocol: TCP
+                volumeMounts:
+                  - name: mediaserver-volume
+                    mountPath: "/config"
+                    subPath: Config/Sonarr
+                  - name: mediaserver-volume
+                    mountPath: "/Downloads"
+                    subPath: Downloads/Sonarr
+                  - name: mediaserver-volume
+                    mountPath: "/TV"
+                    subPath: TV
+                resources:
+                  requests: 
+                    memory: "256Mi"
+                    cpu: "250m"
+                  limits:
+                    memory: "2048Mi"
+                    cpu: "500m"
+                    
+---
+### Service
+apiVersion: v1 
+kind: Service
+metadata:
+  name: sonarr-lb-service
+  namespace: mediaserver-system
+  labels:
+    app: sonarr
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8989
+      targetPort: sonarr-port 
+  selector:
+    app: sonarr
+apiVersion: v1
+---
+kind: Service
+metadata:
+  name: sonarr-service
+  namespace: mediaserver-system
+  labels:
+    app: sonarr
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8989
+      targetPort: sonarr-port 
+  selector:
+    app: sonarr
