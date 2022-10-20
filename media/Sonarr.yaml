@@ -36,7 +36,7 @@ spec:
               - name: sonarr
                 envFrom:
                 - configMapRef:
-                  name: sonarr-config
+                    name: sonarr-config
  # https://hub.docker.com/r/linuxserver/sonarr
                 image: "docker.io/linuxserver/sonarr:latest"
                 imagePullPolicy: Always
