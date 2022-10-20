@@ -38,6 +38,9 @@ spec:
               - name: plex
                 image: "docker.io/linuxserver/plex:latest"
                 imagePullPolicy: Always
+                envFrom:
+                  - configMapRef:
+                    name: plex-config
                 readinessProbe:
                     tcpSocket:
                         port: 32400
