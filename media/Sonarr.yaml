@@ -37,9 +37,9 @@ spec:
  # https://hub.docker.com/r/linuxserver/sonarr
                 image: "docker.io/linuxserver/sonarr:latest"
                 imagePullPolicy: Always
-                securityContext:
-                  runAsUser: 1000
-                  runAsGroup: 1000
+                envFrom:
+                  - configMapRef:
+                    name: sonarr-config
                 readinessProbe:
                     tcpSocket:
                         port: 8989
