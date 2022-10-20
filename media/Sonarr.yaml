@@ -65,7 +65,7 @@ spec:
                     cpu: "500m"
                     
 ---
-### Service
+### Service External IP
 apiVersion: v1 
 kind: Service
 metadata:
@@ -82,6 +82,8 @@ spec:
     app: sonarr
 apiVersion: v1
 ---
+### Service Cluster IP
+apiVersion: v1 
 kind: Service
 metadata:
   name: sonarr-service
