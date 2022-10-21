@@ -2,30 +2,30 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-    name: plex-config
+    name: jellyfin-config
     namespace: mediaserver-system
 data:
     PGID: "1000"
     PUID: "1000"
-    PLEX_CLAIM: "claim-yBw6yY81H6fdDKCQTSrs"
+    TZ: "Australia/Brisbane"
 ---
 ### Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: plex-deployment
+  name: jellyfin-deployment
   namespace: mediaserver-system
   labels:
-    app: plex
+    app: jellyfin
 spec:
-    replicas: 0
+    replicas: 1
     selector:
         matchLabels:
-            app: plex
+            app: jellyfin
     template:
         metadata:
             labels:
-                app: plex
+                app: jellyfin
         spec:
             volumes:
               - name: mediaserver-volume
@@ -35,25 +35,25 @@ spec:
 #                    path: "/mnt/MainPool/media"
                     path: "/volume1/Data"
             containers:
-              - name: plex
-                image: "docker.io/linuxserver/plex:latest"
+              - name: jellyfin
+                image: "lscr.io/linuxserver/jellyfin:latest"
                 imagePullPolicy: Always
                 envFrom:
                 - configMapRef:
-                    name: plex-config
+                    name: jellyfin-config
                 readinessProbe:
                     tcpSocket:
-                        port: 32400
+                        port: 8096
                     initialDelaySeconds: 20
                     periodSeconds: 15
                 ports:  
-                  - name: plex-port
-                    containerPort: 32400
+                  - name: jellyfin-port
+                    containerPort: 8096
                     protocol: TCP
                 volumeMounts:
                   - name: mediaserver-volume
                     mountPath: "/config"
-                    subPath: Config/Plex
+                    subPath: Config/Jellyfin
                   - name: mediaserver-volume
                     mountPath: "/Movies"
                     subPath: Movies
@@ -73,38 +73,14 @@ spec:
 apiVersion: v1 
 kind: Service
 metadata:
-  name: plex-service
+  name: jellyfin-service
   namespace: mediaserver-system
   labels:
-    app: plex
+    app: jellyfin
 spec:
   type: LoadBalancer
   ports:
-    - port: 32400
-      targetPort: plex-port 
-  externalIPs:
-    - 192.168.1.130
+    - port: 8096
+      targetPort: jellyfin-port 
   selector:
-    app: plex
----
-### Ingress / External Access Path
-#apiVersion: networking.k8s.io/v1
-#kind: Ingress
-#metadata:
-#  name: plex-ingress
-#  namespace: mediaserver-system
-#  annotations:
-#    nginx.ingress.kubernetes.io/rewrite-target: /
-#    kubernetes.io/ingress.class: "nginx"
-#spec:
-#  rules:
-#  - host: plex.ocnathor.com
-#    http:
-#      paths:
-#      - path: /
-#        pathType: Prefix
-#        backend:
-#          service:
-#            name: plex-service
-#            port:
-#              number: 8080
+    app: jellyfin
