@@ -39,7 +39,7 @@ spec:
                 envFrom:
                 - configMapRef:
                     name: duckdns-config
-                - secreftRef:
+                - secretRef:
                     name: duckdns-secrets
                 volumeMounts:
                   - name: mediaserver-volume
