@@ -8,6 +8,7 @@ data:
     PGID: "1000"
     PUID: "1000"
     TZ: "Australia/Brisbane"
+    SUBDOMAINS: "ocnathor"
 ---
 ### Deployment
 apiVersion: apps/v1
