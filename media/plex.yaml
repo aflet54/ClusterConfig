@@ -30,9 +30,7 @@ spec:
             volumes:
               - name: mediaserver-volume
                 nfs:
-#                    server: 192.168.1.50
                     server: 192.168.1.68
-#                    path: "/mnt/MainPool/media"
                     path: "/volume1/Data"
             containers:
               - name: plex
