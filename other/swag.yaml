@@ -9,9 +9,9 @@ data:
     PUID: "1000"
     TZ: "Australia/Brisbane"
     URL: "ocnathor.duckdns.org"
-    VALIDATION: "http"
-    SUBDOMAINS: "www,"
-    DNSPLUGIN: "cloudflare"
+    VALIDATION: "dns"
+    SUBDOMAINS: "*"
+    DNSPLUGIN: "duckdns"
     EMAIL: "aflet54@gmail.com"
     STAGING: "false"
 ---
