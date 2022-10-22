@@ -8,9 +8,8 @@ data:
     PGID: "1000"
     PUID: "1000"
     TZ: "Australia/Brisbane"
-    URL: "ocnathor.duckdns.com"
+    URL: "ocnathor.duckdns.org"
     VALIDATION: "http"
-    
 ---
 ### Deployment
 apiVersion: apps/v1
