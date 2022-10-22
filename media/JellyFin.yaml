@@ -55,6 +55,9 @@ spec:
                     mountPath: "/config"
                     subPath: Config/Jellyfin
                   - name: mediaserver-volume
+                    mountPath: "/cert-config"
+                    subPath: Config/swag
+                  - name: mediaserver-volume
                     mountPath: "/Movies"
                     subPath: Movies
                   - name: mediaserver-volume
