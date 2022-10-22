@@ -12,8 +12,7 @@ spec:
     spec:
       restartPolicy: Never
       containers:
-        -
-          name: intelgpu-demo-job-1
+        - name: intelgpu-demo-job-1
           image: docker.io/chihchun/opencl-beignet
           imagePullPolicy: IfNotPresent
           command: [ "clinfo" ]
