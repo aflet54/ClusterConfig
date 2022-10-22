@@ -10,7 +10,7 @@ data:
     TZ: "Australia/Brisbane"
     URL: "ocnathor.duckdns.org"
     VALIDATION: "dns"
-    SUBDOMAINS: "wildcard"
+    SUBDOMAINS: "*"
     DNSPLUGIN: "duckdns"
     EMAIL: "aflet54@gmail.com"
     STAGING: "false"
