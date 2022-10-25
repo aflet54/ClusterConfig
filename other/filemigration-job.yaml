@@ -1,0 +1,56 @@
+### Config Map
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: filemigration-config
+    namespace: other-jobs
+data:
+    PGID: "1000"
+    PUID: "1000"
+    TZ: "Australia/Brisbane"
+    # How many seconds between each action, so as to not overload the old NAS
+    TIME_DELAY: "5"
+---
+### Config Map
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: filemigration-script
+    namespace: other-jobs
+data:
+    test.sh: |
+      echo "test1"
+      ls -l
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: filemigration-job
+spec:
+  parallelism: 1    
+  completions: 3
+  template:
+    spec:
+      volumes:
+      - name: oldnas-volume
+        nfs:
+          server: 192.168.1.50
+          path: "/mnt/MainPool"
+      - name: mediaserver-volume
+        nfs:
+          server: 192.168.1.68
+          path: "/volume1/Data"
+      - name: filemigration-config
+        configMap:
+          name: filemigration-script
+          defaultMode: 0777
+      containers:
+      - name: filemigration-job-ubuntu
+        image: ubuntu
+        - command:
+          - sleep
+          - infinity
+          volumeMounts:
+            - mountPath: /filemigration-script
+              name: test-script
+      restartPolicy: Never
