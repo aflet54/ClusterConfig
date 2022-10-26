@@ -20,11 +20,12 @@ data:
       echo "test1"
       ls -l
       echo "listing files in other"
-      ls -l /other_data/
+      ls -l /other_data/ | wc -l
       echo "Listing old media Folder"
-      ls -l /old_media/
+      ls -l /old_media/ | wc -l
       echo "Listing old TV media Folder"
-      ls -l /old_media/TV/
+      find /old_media/TV -type f | wc -l
+      
 ---
 ## The Job
 apiVersion: batch/v1
