@@ -124,8 +124,8 @@ spec:
                 name: mediaserver-volume
                 subPath: "Config/transmission"
             securityContext:
-              runAsUser: "1000"
-              runAsGroup: "1000"
+              runAsUser: '1000'
+              runAsGroup: '1000'
             volumes:
               - name: mediaserver-volume
                 nfs:
