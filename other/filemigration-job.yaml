@@ -39,17 +39,18 @@ spec:
         nfs:
           server: 192.168.1.68
           path: "/volume1/Data"
-      - name: filemigration-config
+      - name: filemigration-script
         configMap:
           name: filemigration-script
           defaultMode: 0777
       containers:
-      - name: filemigration-job-ubuntu
+      - name: test
         image: ubuntu
-        - command:
-          - sleep
-          - infinity
-          volumeMounts:
-            - mountPath: /filemigration-script
-              name: test-script
+        commands: ['sleep infinity']
+        envFrom:
+        - configMapRef:
+          name: filemigration-config
+        volumeMounts:
+        - mountPath: /filemigration-script
+          name: test-script
       restartPolicy: Never
