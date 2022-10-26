@@ -30,7 +30,7 @@ data:
       let i=0
       echo -e "## Starting File removal for /other_data/tv \n \n"
       echo "## Found $fcount files"
-      find /other_data/tv -type f -maxdepth 1 | while read file; do removeFiles "$file" "$i" "$fcount"; ((i++)); sleep $TIME_DELAY; done
+      find /other_data/tv -type f | while read file; do removeFiles "$file" "$i" "$fcount"; ((i++)); sleep $TIME_DELAY; done
       echo "## Done Removing from /other_data/tv !"
       
       echo -e "## Starting File removal for /other_data/movie \n \n"
