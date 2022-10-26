@@ -28,7 +28,7 @@ data:
       echo "$fcount"
       echo "Removing old files from /other/tv"
       let i=1
-      find /old_media/TV -type f -exec $SHELL -c '
+      find /other/tv -type f -exec $SHELL -c '
         echo -n "\r$i / $fcount - "
         echo "$0"
         sleep $TIME_DELAY
