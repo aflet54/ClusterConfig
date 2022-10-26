@@ -2,34 +2,30 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-    name: transmission-config
+    name: jackett-config
     namespace: downloaders
 data:
     PGID: "1000"
     PUID: "1000"
     TZ: "Australia/Brisbane"
-    TRANSMISSION_WEB_HOME: "/combustion-release/"
-    PEERPORT: "51413"
-    USER: "TRANS"
-    PASS: "TPASS"
 ---
 ### Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: transmission-deployment
+  name: jackett-deployment
   namespace: downloaders
   labels:
-    app: transmission
+    app: jackett
 spec:
     replicas: 1
     selector:
         matchLabels:
-            app: transmission
+            app: jackett
     template:
         metadata:
             labels:
-                app: transmission
+                app: jackett
         spec:
           volumes:
             - name: mediaserver-volume
@@ -37,31 +33,25 @@ spec:
                 server: 192.168.1.68
                 path: "/volume1/Data"
           containers:
-            - name: transmission
+            - name: jackett
               envFrom:
               - configMapRef:
-                  name: transmission-config
-              image: "lscr.io/linuxserver/transmission:latest"
+                  name: jackett-config
+              image: "lscr.io/linuxserver/jackett:latest"
               imagePullPolicy: Always
               readinessProbe:
                   tcpSocket:
-                      port: 9091
+                      port: 9117
                   initialDelaySeconds: 20
                   periodSeconds: 15
               ports:  
                 - name: trans-port
-                  containerPort: 9091
+                  containerPort: 9117
                   protocol: TCP
-                - name: trans-peer-tcp
-                  containerPort: 51413
-                  protocol: TCP
-                - name: trans-peer-udp
-                  containerPort: 51413
-                  protocol: UDP
               volumeMounts:
                 - name: mediaserver-volume
                   mountPath: "/config"
-                  subPath: Config/transmission
+                  subPath: Config/jackett
                 - name: mediaserver-volume
                   mountPath: "/Downloads"
                   subPath: Downloads/
@@ -77,51 +67,14 @@ spec:
 apiVersion: v1 
 kind: Service
 metadata:
-  name: transmission-lb-service
+  name: jackett-lb-service
   namespace: downloaders
   labels:
-    app: transmission
+    app: jackett
 spec:
   type: LoadBalancer
   ports:
-    - port: 9091
+    - port: 9117
       targetPort: trans-port
   selector:
-    app: transmission
-apiVersion: v1
----
-### Service External IP - peer TCP
-apiVersion: v1 
-kind: Service
-metadata:
-  name: trans-peer-tcp
-  namespace: downloaders
-  labels:
-    app: transmission
-spec:
-  type: ClusterIP
-  ports:
-    - port: 51413
-      targetPort: trans-peer-tcp
-      protocol: TCP
-  selector:
-    app: transmission
-apiVersion: v1
----
-### Service External IP - peer UDP
-apiVersion: v1 
-kind: Service
-metadata:
-  name: trans-peer-udp
-  namespace: downloaders
-  labels:
-    app: transmission
-spec:
-  type: ClusterIP
-  ports:
-    - port: 51413
-      targetPort: trans-peer-udp
-      protocol: UDP
-  selector:
-    app: transmission
-apiVersion: v1
+    app: jackett
