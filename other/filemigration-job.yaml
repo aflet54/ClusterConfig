@@ -36,13 +36,6 @@ data:
       let i=0
       echo -e "## Starting File removal for /other_data/tv \n \n"
       find /other_data/tv -type f -maxdepth 1 | while read file; do removeFiles "$file" "$i" "$fcount"; ((i++)); sleep $TIME_DELAY; done
-      sleep infinity
-      find /other_data/tv -type f -exec $SHELL -c '
-        echo -n "\r$i / $fcount - "
-        echo "$0"
-        sleep $TIME_DELAY
-        ((i++))
-      ' {} \;
       echo "Done!"
       sleep $TIME_DELAY
       sleep infinity
