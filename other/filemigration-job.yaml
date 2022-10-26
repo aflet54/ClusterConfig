@@ -8,7 +8,7 @@ data:
     PUID: "1000"
     TZ: "Australia/Brisbane"
     # How many seconds between each action, so as to not overload the old NAS
-    TIME_DELAY: "5"
+    TIME_DELAY: "3"
 ---
 ### Config Map
 apiVersion: v1
@@ -22,13 +22,8 @@ data:
       # Creating function
       removeFiles() {
         echo -e "\r\e[1K$2 / $3 - Removing $1"
-      
+        rm "$1"
       }
-      export -f removeFiles
-      echo "listing files in other"
-      ls -l /other_data/ | wc -l
-      echo "Listing old media Folder"
-      ls -l /old_media/ | wc -l
       echo "Getting Count of Old TV Downloads"
       let fcount=$(find /other_data/tv -type f | wc -l)
       echo "$fcount"
