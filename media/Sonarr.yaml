@@ -55,7 +55,7 @@ spec:
                     subPath: Config/Sonarr
                   - name: mediaserver-volume
                     mountPath: "/Downloads"
-                    subPath: Downloads/Sonarr
+                    subPath: Downloads
                   - name: mediaserver-volume
                     mountPath: "/TV"
                     subPath: TV
