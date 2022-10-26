@@ -23,12 +23,12 @@ data:
       ls -l /other_data/ | wc -l
       echo "Listing old media Folder"
       ls -l /old_media/ | wc -l
-      echo "Listing old TV media Folder"
-      let fcount=$(find /old_media/TV -type f | wc -l)
+      echo "Getting Count of Old TV Downloads"
+      let fcount=$(find /other_data/tv -type f | wc -l)
       echo "$fcount"
       echo "Removing old files from /other/tv"
       let i=1
-      find /other/tv -type f -exec $SHELL -c '
+      find /other_data/tv -type f -exec $SHELL -c '
         echo -n "\r$i / $fcount - "
         echo "$0"
         sleep $TIME_DELAY
