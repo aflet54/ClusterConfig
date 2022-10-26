@@ -129,8 +129,12 @@ spec:
             volumes:
               - name: mediaserver-volume
                 nfs:
-                    server: 192.168.1.68
-                    path: "/volume1/Data"
+                  server: 192.168.1.68
+                  path: "/volume1/Data"
+              - name: init-files-transmission
+                configMap:
+                  defaultMode: 493
+                  name: init-transmission-cm
             containers:
               - name: transmission
                 envFrom:
