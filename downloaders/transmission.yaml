@@ -83,6 +83,7 @@ data:
 kind: ConfigMap
 metadata:
   name: init-transmission-cm
+  namespace: downloaders
 ---
 ### Application Config Map
 apiVersion: v1
