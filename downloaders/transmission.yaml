@@ -64,7 +64,7 @@ spec:
                   subPath: Config/transmission
                 - name: mediaserver-volume
                   mountPath: "/Downloads"
-                  subPath: Downloads/
+                  subPath: Downloads
               resources:
                 requests: 
                   memory: "256Mi"

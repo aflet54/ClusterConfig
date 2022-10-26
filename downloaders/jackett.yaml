@@ -53,7 +53,7 @@ spec:
                   mountPath: "/config"
                   subPath: Config/jackett
                 - name: mediaserver-volume
-                  mountPath: "/Downloads"
+                  mountPath: "/downloads"
                   subPath: Downloads/
               resources:
                 requests: 
