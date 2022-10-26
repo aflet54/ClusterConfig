@@ -36,7 +36,7 @@ data:
       ' {} \;
       echo "Done!"
       sleep $TIME_DELAY
-      sleep infinite
+      sleep infinity
 ---
 ## The Job
 apiVersion: batch/v1
