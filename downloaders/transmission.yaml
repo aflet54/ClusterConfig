@@ -61,7 +61,7 @@ data:
         "rpc-port": 9091,
         "rpc-url": "",
         "rpc-username": "",
-        "rpc-whitelist": "127.0.0.1",
+        "rpc-whitelist": "*.*.*.*",
         "rpc-whitelist-enabled": false,
         "scrape-paused-torrents-enabled": true,
         "script-torrent-done-enabled": false,
@@ -95,6 +95,7 @@ data:
     PGID: "1000"
     PUID: "1000"
     TZ: "Australia/Brisbane"
+    TRANSMISSION_WEB_HOME: "/combustion-release/"
 ---
 ### Deployment
 apiVersion: apps/v1
@@ -141,7 +142,7 @@ spec:
               envFrom:
               - configMapRef:
                   name: transmission-config
-              image: "docker.io/linuxserver/transmission:latest"
+              image: "lscr.io/linuxserver/transmission:latest"
               imagePullPolicy: Always
               readinessProbe:
                   tcpSocket:
