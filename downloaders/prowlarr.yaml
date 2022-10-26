@@ -1,0 +1,77 @@
+### Application Config Map
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: prowlarr-config
+    namespace: downloaders
+data:
+    PGID: "1000"
+    PUID: "1000"
+    TZ: "Australia/Brisbane"
+---
+### Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prowlarr-deployment
+  namespace: downloaders
+  labels:
+    app: prowlarr
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: prowlarr
+    template:
+        metadata:
+            labels:
+                app: prowlarr
+        spec:
+          volumes:
+            - name: mediaserver-volume
+              nfs:
+                server: 192.168.1.68
+                path: "/volume1/Data"
+          containers:
+            - name: prowlarr
+              envFrom:
+              - configMapRef:
+                  name: prowlarr-config
+              image: "lscr.io/linuxserver/prowlarr:develop"
+              imagePullPolicy: Always
+              readinessProbe:
+                  tcpSocket:
+                      port: 9696
+                  initialDelaySeconds: 20
+                  periodSeconds: 15
+              ports:  
+                - name: trans-port
+                  containerPort: 9696
+                  protocol: TCP
+              volumeMounts:
+                - name: mediaserver-volume
+                  mountPath: "/config"
+                  subPath: Config/prowlarr
+              resources:
+                requests: 
+                  memory: "256Mi"
+                  cpu: "250m"
+                limits:
+                  memory: "2048Mi"
+                  cpu: "500m"
+---
+### Service External IP
+apiVersion: v1 
+kind: Service
+metadata:
+  name: prowlarr-lb-service
+  namespace: downloaders
+  labels:
+    app: prowlarr
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 9696
+      targetPort: trans-port
+  selector:
+    app: prowlarr
