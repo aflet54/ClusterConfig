@@ -17,7 +17,7 @@ metadata:
     name: filemigration-script
 data:
     migrate.sh: |
-      echo "test1"
+      echo "Current Time Delay $TIME_DELAY"
       ls -l
       echo "listing files in other"
       ls -l /other_data/ | wc -l
@@ -25,6 +25,8 @@ data:
       ls -l /old_media/ | wc -l
       echo "Listing old TV media Folder"
       find /old_media/TV -type f | wc -l
+      echo "Removing old files from /other/tv"
+      
       
 ---
 ## The Job
