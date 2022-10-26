@@ -26,13 +26,20 @@ data:
       }
       echo "Getting Count of Old TV Downloads"
       let fcount=$(find /other_data/tv -type f | wc -l)
-      echo "$fcount"
       echo "Removing old files from /other/tv"
       let i=0
       echo -e "## Starting File removal for /other_data/tv \n \n"
+      echo "## Found $fcount files"
       find /other_data/tv -type f -maxdepth 1 | while read file; do removeFiles "$file" "$i" "$fcount"; ((i++)); sleep $TIME_DELAY; done
-      echo "Done!"
-      sleep $TIME_DELAY
+      echo "## Done Removing from /other_data/tv !"
+      
+      echo -e "## Starting File removal for /other_data/movie \n \n"
+      let fcount=$(find /other_data/movie -type f | wc -l)
+      let i=0
+      echo "## Found $fcount files"
+      find /other_data/movie -type f | while read file; do removeFiles "$file" "$i" "$fcount"; ((i++)); sleep $TIME_DELAY; done
+      echo "## Done Removing from /other_data/movie !"
+      
       sleep infinity
 ---
 ## The Job
