@@ -26,8 +26,10 @@ data:
       echo "Listing old TV media Folder"
       find /old_media/TV -type f | wc -l
       echo "Removing old files from /other/tv"
-      
-      
+      find /old_media/TV -type f -exec $SHELL -c '
+        echo "$0"
+      ' {} \;
+      sleep $TIME_DELAY
 ---
 ## The Job
 apiVersion: batch/v1
