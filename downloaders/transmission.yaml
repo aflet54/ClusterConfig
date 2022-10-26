@@ -1,4 +1,3 @@
----
 ### CONFIGMAP
 ## INIT-CONTAINER
 apiVersion: v1
