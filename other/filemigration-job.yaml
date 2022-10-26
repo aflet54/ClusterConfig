@@ -21,7 +21,7 @@ data:
       ls -l
       # Creating function
       removeFiles() {
-        echo -ne "\r\e[0K$2 / $3 - $1"
+        echo -ne "\r\e[0K$2 / $3 - Removing $1"
       
       }
       export -f removeFiles
