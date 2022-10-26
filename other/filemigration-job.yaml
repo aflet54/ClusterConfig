@@ -16,9 +16,13 @@ kind: ConfigMap
 metadata:
     name: filemigration-script
 data:
-    test.sh: |
+    migrate.sh: |
       echo "test1"
       ls -l
+      echo "listing files in other"
+      ls -l /other_data/
+      echo "Listing old TV media Folder"
+      ls -l /old_media/TV/
 ---
 ## The Job
 apiVersion: batch/v1
@@ -44,14 +48,23 @@ spec:
           name: filemigration-script
           defaultMode: 0777
       containers:
-      - name: test
+      - name: migrate
         image: ubuntu
         command: ["/bin/bash", "-c"]
-        args: ["filemigration-script/test.sh && sleep infinity"]
+        args: ["filemigration-script/migrate.sh"]
         envFrom:
         - configMapRef:
-            name: filemigration-config
+          name: filemigration-config
         volumeMounts:
         - mountPath: /filemigration-script
           name: filemigration-script
+        - name: mediaserver-volume
+          mountPath: "/TV"
+          subPath: TV
+        - name: oldnas-volume
+          mountPath: "/other_data"
+          subPath: other
+        - name: oldnas-volume
+          mountPath: "/old_media"
+          subPath: media
       restartPolicy: Never
