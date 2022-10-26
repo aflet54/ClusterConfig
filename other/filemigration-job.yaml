@@ -21,7 +21,7 @@ data:
       ls -l
       # Creating function
       removeFiles() {
-        echo -n "\r\e[0K$2 / $3 - $1"
+        echo -ne "\r\e[0K$2 / $3 - $1"
       
       }
       export -f removeFiles
@@ -34,6 +34,7 @@ data:
       echo "$fcount"
       echo "Removing old files from /other/tv"
       let i=0
+      echo -e "## Starting File removal for /other_data/tv \n \n"
       find /other_data/tv -type f | while read file; do removeFiles "$file" "$i" "$fcount"; ((i++)); done
       sleep infinity
       find /other_data/tv -type f -exec $SHELL -c '
