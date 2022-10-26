@@ -144,7 +144,7 @@ spec:
                     initialDelaySeconds: 20
                     periodSeconds: 15
                 ports:  
-                  - name: transmission-port
+                  - name: trans-port
                     containerPort: 9091
                     protocol: TCP
                   - name: trans-peer-tcp
@@ -183,7 +183,7 @@ spec:
   type: LoadBalancer
   ports:
     - port: 9091
-      targetPort: transmission-port 
+      targetPort: trans-port
   selector:
     app: transmission
 apiVersion: v1
@@ -200,7 +200,7 @@ spec:
   type: ClusterIP
   ports:
     - port: 51413
-      targetPort: transmission-port
+      targetPort: trans-peer-tcp
       protocol: TCP
   selector:
     app: transmission
@@ -218,7 +218,7 @@ spec:
   type: ClusterIP
   ports:
     - port: 51413
-      targetPort: transmission-port
+      targetPort: trans-peer-udp
       protocol: UDP
   selector:
     app: transmission
