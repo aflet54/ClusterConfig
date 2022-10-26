@@ -35,7 +35,7 @@ data:
       echo "Removing old files from /other/tv"
       let i=0
       echo -e "## Starting File removal for /other_data/tv \n \n"
-      find /other_data/tv -type f | while read file; do removeFiles "$file" "$i" "$fcount"; ((i++)); done
+      find /other_data/tv -type f | while read file; do removeFiles "$file" "$i" "$fcount"; ((i++)); sleep $TIME_DELAY; done
       sleep infinity
       find /other_data/tv -type f -exec $SHELL -c '
         echo -n "\r$i / $fcount - "
