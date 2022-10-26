@@ -47,7 +47,7 @@ spec:
       - name: test
         image: ubuntu
         command: ["/bin/bash", "-c"]
-        args: ["test-script/test.sh && sleep infinity"]
+        args: ["filemigration-script/test.sh && sleep infinity"]
         envFrom:
         - configMapRef:
             name: filemigration-config
