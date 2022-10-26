@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
     name: gluetun-config
-    namespace: downloaders
+    namespace: net-dns
 data:
     PGID: "1000"
     PUID: "1000"
@@ -17,7 +17,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: gluetun-deployment
-  namespace: downloaders
+  namespace: net-dns
   labels:
     app: gluetun
 spec:
@@ -68,7 +68,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: gluetun-lb-service
-  namespace: downloaders
+  namespace: net-dns
   labels:
     app: gluetun
 spec:
