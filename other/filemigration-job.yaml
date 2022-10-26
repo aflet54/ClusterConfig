@@ -21,6 +21,8 @@ data:
       ls -l
       echo "listing files in other"
       ls -l /other_data/
+      echo "Listing old media Folder"
+      ls -l /old_media/
       echo "Listing old TV media Folder"
       ls -l /old_media/TV/
 ---
