@@ -53,8 +53,8 @@ spec:
                   mountPath: "/config"
                   subPath: Config/jackett
                 - name: mediaserver-volume
-                  mountPath: "/downloads"
-                  subPath: Downloads/
+                  mountPath: "/Downloads"
+                  subPath: Downloads
               resources:
                 requests: 
                   memory: "256Mi"
