@@ -19,6 +19,12 @@ data:
     migrate.sh: |
       echo "Current Time Delay $TIME_DELAY"
       ls -l
+      # Creating function
+      removeFiles() {
+      
+      
+      }
+      export -f removeFiles
       echo "listing files in other"
       ls -l /other_data/ | wc -l
       echo "Listing old media Folder"
@@ -27,7 +33,9 @@ data:
       let fcount=$(find /other_data/tv -type f | wc -l)
       echo "$fcount"
       echo "Removing old files from /other/tv"
-      let i=1
+      let i=0
+      find /other_data/tv -type f | while read file; do removeFiles "$file"; done
+      sleep infinity
       find /other_data/tv -type f -exec $SHELL -c '
         echo -n "\r$i / $fcount - "
         echo "$0"
