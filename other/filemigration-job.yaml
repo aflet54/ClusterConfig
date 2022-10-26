@@ -46,11 +46,11 @@ spec:
       containers:
       - name: test
         image: ubuntu
-        command: ['sleep infinity']
+        commands: ['test-script/test.sh','sleep infinity']
         envFrom:
         - configMapRef:
             name: filemigration-config
         volumeMounts:
         - mountPath: /filemigration-script
-          name: test-script
+          name: filemigration-script
       restartPolicy: Never
