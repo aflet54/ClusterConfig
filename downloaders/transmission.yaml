@@ -84,6 +84,7 @@ data:
 kind: ConfigMap
 metadata:
   name: init-transmission-cm
+---
 ### Application Config Map
 apiVersion: v1
 kind: ConfigMap
