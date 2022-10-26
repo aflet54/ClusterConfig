@@ -46,7 +46,8 @@ spec:
       containers:
       - name: test
         image: ubuntu
-        commands: ['test-script/test.sh','sleep infinity']
+        command: ["/bin/bash", "-c"]
+        args: ["test-script/test.sh && sleep infinity"]
         envFrom:
         - configMapRef:
             name: filemigration-config
