@@ -126,54 +126,54 @@ spec:
             securityContext:
               runAsUser: 1000
               runAsGroup: 1000
-            volumes:
-              - name: mediaserver-volume
-                nfs:
-                  server: 192.168.1.68
-                  path: "/volume1/Data"
-              - name: init-files-transmission
-                configMap:
-                  defaultMode: 493
-                  name: init-transmission-cm
-            containers:
-              - name: transmission
-                envFrom:
-                - configMapRef:
-                    name: transmission-config
-                image: "docker.io/linuxserver/transmission:latest"
-                imagePullPolicy: Always
-                readinessProbe:
-                    tcpSocket:
-                        port: 9091
-                    initialDelaySeconds: 20
-                    periodSeconds: 15
-                ports:  
-                  - name: trans-port
-                    containerPort: 9091
-                    protocol: TCP
-                  - name: trans-peer-tcp
-                    containerPort: 51413
-                    protocol: TCP
-                  - name: trans-peer-udp
-                    containerPort: 51413
-                    protocol: UDP
-                volumeMounts:
-                  - name: mediaserver-volume
-                    mountPath: "/config"
-                    subPath: Config/transmission
-                  - name: mediaserver-volume
-                    mountPath: "/Downloads"
-                    subPath: Downloads/
-                  - name: mediaserver-volume
-                    mountPath: "/TV"
-                    subPath: TV
-                resources:
-                  requests: 
-                    memory: "256Mi"
-                    cpu: "250m"
-                  limits:
-                    memory: "2048Mi"
-                    cpu: "500m"
+          volumes:
+            - name: mediaserver-volume
+              nfs:
+                server: 192.168.1.68
+                path: "/volume1/Data"
+            - name: init-files-transmission
+              configMap:
+                defaultMode: 493
+                name: init-transmission-cm
+          containers:
+            - name: transmission
+              envFrom:
+              - configMapRef:
+                  name: transmission-config
+              image: "docker.io/linuxserver/transmission:latest"
+              imagePullPolicy: Always
+              readinessProbe:
+                  tcpSocket:
+                      port: 9091
+                  initialDelaySeconds: 20
+                  periodSeconds: 15
+              ports:  
+                - name: trans-port
+                  containerPort: 9091
+                  protocol: TCP
+                - name: trans-peer-tcp
+                  containerPort: 51413
+                  protocol: TCP
+                - name: trans-peer-udp
+                  containerPort: 51413
+                  protocol: UDP
+              volumeMounts:
+                - name: mediaserver-volume
+                  mountPath: "/config"
+                  subPath: Config/transmission
+                - name: mediaserver-volume
+                  mountPath: "/Downloads"
+                  subPath: Downloads/
+                - name: mediaserver-volume
+                  mountPath: "/TV"
+                  subPath: TV
+              resources:
+                requests: 
+                  memory: "256Mi"
+                  cpu: "250m"
+                limits:
+                  memory: "2048Mi"
+                  cpu: "500m"
 ---
 ### Service External IP
 apiVersion: v1 
