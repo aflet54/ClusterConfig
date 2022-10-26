@@ -1,90 +1,3 @@
-### CONFIGMAP
-## INIT-CONTAINER
-apiVersion: v1
-data:
-  init-transmission.sh: |
-    #!/bin/bash
-    echo "### Initializing config ###"
-    if [ ! -f /transmission-config/settings.json ]; then
-      cp -n /init-transmission/settings.json /transmission-config/settings.json
-      echo "### No configuration found, intialized with default settings ###"
-    fi
-  settings.json: |
-    {
-        "alt-speed-down": 50,
-        "alt-speed-enabled": false,
-        "alt-speed-time-begin": 540,
-        "alt-speed-time-day": 127,
-        "alt-speed-time-enabled": false,
-        "alt-speed-time-end": 1020,
-        "alt-speed-up": 50,
-        "bind-address-ipv4": "0.0.0.0",
-        "bind-address-ipv6": "::",
-        "blocklist-enabled": false,
-        "blocklist-url": "http://www.example.com/blocklist",
-        "cache-size-mb": 4,
-        "dht-enabled": true,
-        "download-dir": "/Downloads/Transmission/complete",
-        "download-queue-enabled": true,
-        "download-queue-size": 5,
-        "encryption": 1,
-        "idle-seeding-limit": 30,
-        "idle-seeding-limit-enabled": false,
-        "incomplete-dir": "/Downloads/Transmission/incomplete",
-        "incomplete-dir-enabled": true,
-        "lpd-enabled": false,
-        "message-level": 2,
-        "peer-congestion-algorithm": "",
-        "peer-id-ttl-hours": 6,
-        "peer-limit-global": 200,
-        "peer-limit-per-torrent": 50,
-        "peer-port": 51413,
-        "peer-port-random-high": 65535,
-        "peer-port-random-low": 49152,
-        "peer-port-random-on-start": false,
-        "peer-socket-tos": "default",
-        "pex-enabled": true,
-        "port-forwarding-enabled": true,
-        "preallocation": 1,
-        "prefetch-enabled": true,
-        "queue-stalled-enabled": true,
-        "queue-stalled-minutes": 30,
-        "ratio-limit": 2,
-        "ratio-limit-enabled": false,
-        "rename-partial-files": true,
-        "rpc-authentication-required": false,
-        "rpc-bind-address": "0.0.0.0",
-        "rpc-enabled": true,
-        "rpc-host-whitelist": "",
-        "rpc-host-whitelist-enabled": false,
-        "rpc-password": "",
-        "rpc-port": 9091,
-        "rpc-url": "",
-        "rpc-username": "",
-        "rpc-whitelist": "*.*.*.*",
-        "rpc-whitelist-enabled": false,
-        "scrape-paused-torrents-enabled": true,
-        "script-torrent-done-enabled": false,
-        "script-torrent-done-filename": "",
-        "seed-queue-enabled": false,
-        "seed-queue-size": 10,
-        "speed-limit-down": 100,
-        "speed-limit-down-enabled": false,
-        "speed-limit-up": 100,
-        "speed-limit-up-enabled": false,
-        "start-added-torrents": true,
-        "trash-original-torrent-files": false,
-        "umask": 2,
-        "upload-slots-per-torrent": 14,
-        "utp-enabled": false,
-        "watch-dir": "/watch",
-        "watch-dir-enabled": true
-    }
-kind: ConfigMap
-metadata:
-  name: init-transmission-cm
-  namespace: downloaders
----
 ### Application Config Map
 apiVersion: v1
 kind: ConfigMap
@@ -96,6 +9,9 @@ data:
     PUID: "1000"
     TZ: "Australia/Brisbane"
     TRANSMISSION_WEB_HOME: "/combustion-release/"
+    PEERPORT: 51413
+    USER: "TRANS"
+    PASS: "TPASS"
 ---
 ### Deployment
 apiVersion: apps/v1
@@ -115,28 +31,11 @@ spec:
             labels:
                 app: transmission
         spec:
-          initContainers:
-          - name: config-transmission
-            image: docker.io/ubuntu:groovy
-            command: ["/init-transmission/init-transmission.sh"]
-            volumeMounts:
-              - mountPath: /init-transmission
-                name: init-files-transmission 
-              - mountPath: /transmission-config
-                name: mediaserver-volume
-                subPath: "Config/transmission"
-            securityContext:
-              runAsUser: 1000
-              runAsGroup: 1000
           volumes:
             - name: mediaserver-volume
               nfs:
                 server: 192.168.1.68
                 path: "/volume1/Data"
-            - name: init-files-transmission
-              configMap:
-                defaultMode: 493
-                name: init-transmission-cm
           containers:
             - name: transmission
               envFrom:
