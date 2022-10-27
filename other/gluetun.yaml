@@ -9,8 +9,6 @@ data:
     PUID: "1000"
     TZ: "Australia/Brisbane"
     VPN_SERVICE_PROVIDER: "cyberghost"
-    OPENVPN_USER: "abc"
-    OPENVPN_PASSWORD: "abc"
 ---
 ### Deployment
 apiVersion: apps/v1
@@ -40,6 +38,8 @@ spec:
               envFrom:
               - configMapRef:
                   name: gluetun-config
+              - secretRef:
+                  name: gluetun-secret
               image: "lscr.io/qmcgaw/gluetun:latest"
               imagePullPolicy: Always
               readinessProbe:
