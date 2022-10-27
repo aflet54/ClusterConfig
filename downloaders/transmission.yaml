@@ -13,6 +13,19 @@ data:
     USER: "TRANS"
     PASS: "TPASS"
 ---
+### Application Config Map
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: gluetun-config
+    namespace: downloaders
+data:
+    PGID: "1000"
+    PUID: "1000"
+    TZ: "Australia/Brisbane"
+    VPN_SERVICE_PROVIDER: "privado"
+    #SERVER_COUNTRIES: "Canada,France,Netherlands,Singapore,United States"
+---
 ### Deployment
 apiVersion: apps/v1
 kind: Deployment
@@ -75,9 +88,9 @@ spec:
             - name: gluetun
               envFrom:
               - configMapRef:
-                  name: gluetun-config.net-dns
+                  name: gluetun-config
               - secretRef:
-                  name: gluetun-secrets.net-dns
+                  name: gluetun-secret
               image: "docker.io/qmcgaw/gluetun:latest"
               imagePullPolicy: Always
               ports:  
