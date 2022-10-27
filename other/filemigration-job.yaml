@@ -39,8 +39,6 @@ data:
       echo "## Found $fcount files"
       find /other_data/movie -type f | while read file; do removeFiles "$file" "$i" "$fcount"; ((i++)); sleep $TIME_DELAY; done
       echo "## Done Removing from /other_data/movie !"
-      
-      sleep infinity
 ---
 ## The Job
 apiVersion: batch/v1
