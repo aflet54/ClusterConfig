@@ -72,6 +72,33 @@ spec:
                 limits:
                   memory: "2048Mi"
                   cpu: "500m"
+            - name: gluetun
+              envFrom:
+              - configMapRef:
+                  name: gluetun-config.net-dns
+              - secretRef:
+                  name: gluetun-secrets.net-dns
+              image: "docker.io/qmcgaw/gluetun:latest"
+              imagePullPolicy: Always
+              ports:  
+                - name: vpn-port
+                  containerPort: 8888
+                  protocol: TCP
+                - name: shadow-tcp
+                  containerPort: 8388
+                  protocol: TCP
+                - name: shadow-udp
+                  containerPort: 8388
+                  protocol: UDP
+              volumeMounts:
+                - name: mediaserver-volume
+                  mountPath: "/gluetun"
+                  subPath: Config/gluetun
+              resources: {}
+              securityContext:
+                capabilities:
+                  add:
+                    - NET_ADMIN
 ---
 ### Service External IP
 apiVersion: v1 
