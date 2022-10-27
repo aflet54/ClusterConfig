@@ -1,0 +1,123 @@
+### Application Config Map
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: nzbget-config
+    namespace: downloaders
+data:
+    PGID: "1000"
+    PUID: "1000"
+    TZ: "Australia/Brisbane"
+    NZBGET_USER: "NZBGET_USER"
+    NZBGET_PASS: "TPASS"
+---
+### Application Config Map
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: gluetun-config
+    namespace: downloaders
+data:
+    PGID: "1000"
+    PUID: "1000"
+    TZ: "Australia/Brisbane"
+    VPN_SERVICE_PROVIDER: "privado"
+    #SERVER_COUNTRIES: "Canada,France,Netherlands,Singapore,United States"
+---
+### Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nzbget-deployment
+  namespace: downloaders
+  labels:
+    app: nzbget
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: nzbget
+    template:
+        metadata:
+            labels:
+                app: nzbget
+        spec:
+          volumes:
+            - name: mediaserver-volume
+              nfs:
+                server: 192.168.1.68
+                path: "/volume1/Data"
+          containers:
+            - name: nzbget
+              envFrom:
+              - configMapRef:
+                  name: nzbget-config
+              image: "lscr.io/linuxserver/nzbget:latest"
+              imagePullPolicy: Always
+              readinessProbe:
+                  tcpSocket:
+                      port: 6789
+                  initialDelaySeconds: 20
+                  periodSeconds: 15
+              ports:  
+                - name: trans-port
+                  containerPort: 6789
+                  protocol: TCP
+              volumeMounts:
+                - name: mediaserver-volume
+                  mountPath: "/config"
+                  subPath: Config/nzbget
+                - name: mediaserver-volume
+                  mountPath: "/Downloads"
+                  subPath: Downloads
+              resources:
+                requests: 
+                  memory: "256Mi"
+                  cpu: "250m"
+                limits:
+                  memory: "2048Mi"
+                  cpu: "500m"
+            - name: gluetun
+              envFrom:
+              - configMapRef:
+                  name: gluetun-config
+              - secretRef:
+                  name: gluetun-secret
+              image: "docker.io/qmcgaw/gluetun:latest"
+              imagePullPolicy: Always
+              ports:  
+                - name: vpn-port
+                  containerPort: 8888
+                  protocol: TCP
+                - name: shadow-tcp
+                  containerPort: 8388
+                  protocol: TCP
+                - name: shadow-udp
+                  containerPort: 8388
+                  protocol: UDP
+              volumeMounts:
+                - name: mediaserver-volume
+                  mountPath: "/gluetun"
+                  subPath: Config/gluetun
+              resources: {}
+              securityContext:
+                capabilities:
+                  add:
+                    - NET_ADMIN
+---
+### Service External IP
+apiVersion: v1 
+kind: Service
+metadata:
+  name: nzbget-lb-service
+  namespace: downloaders
+  labels:
+    app: nzbget
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 6789
+      targetPort: trans-port
+  selector:
+    app: nzbget
+apiVersion: v1
