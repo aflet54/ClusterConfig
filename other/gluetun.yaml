@@ -9,7 +9,7 @@ data:
     PUID: "1000"
     TZ: "Australia/Brisbane"
     VPN_SERVICE_PROVIDER: "privado"
-    SERVER_COUNTRIES: "Canada,France,Netherlands,Singapore,Sweden,United States"
+    #SERVER_COUNTRIES: "Canada,France,Netherlands,Singapore,United States"
 ---
 ### Deployment
 apiVersion: apps/v1
@@ -40,18 +40,19 @@ spec:
               - configMapRef:
                   name: gluetun-config
               - secretRef:
-                  name: gluetun-secret
-              image: "lscr.io/qmcgaw/gluetun:latest"
+                  name: gluetun-secrets
+              image: "docker.io/qmcgaw/gluetun:latest"
               imagePullPolicy: Always
-              readinessProbe:
-                  tcpSocket:
-                      port: 8888
-                  initialDelaySeconds: 20
-                  periodSeconds: 15
               ports:  
                 - name: vpn-port
                   containerPort: 8888
                   protocol: TCP
+                - name: shadow-tcp
+                  containerPort: 8388
+                  protocol: TCP
+                - name: shadow-udp
+                  containerPort: 8388
+                  protocol: UDP
               volumeMounts:
                 - name: mediaserver-volume
                   mountPath: "/gluetun"
@@ -63,19 +64,7 @@ spec:
                 limits:
                   memory: "2048Mi"
                   cpu: "500m"
----
-### Service External IP
-apiVersion: v1 
-kind: Service
-metadata:
-  name: gluetun-lb-service
-  namespace: net-dns
-  labels:
-    app: gluetun
-spec:
-  type: LoadBalancer
-  ports:
-    - port: 9696
-      targetPort: vpn-port
-  selector:
-    app: gluetun
+              securityContext:
+                capabilities:
+                  add:
+                    - NET_ADMIN
