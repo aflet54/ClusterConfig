@@ -8,7 +8,8 @@ data:
     PGID: "1000"
     PUID: "1000"
     TZ: "Australia/Brisbane"
-    VPN_SERVICE_PROVIDER: "cyberghost"
+    VPN_SERVICE_PROVIDER: "privado"
+    SERVER_COUNTRIES: "Canada,France,Netherlands,Singapore,Sweden,United States"
 ---
 ### Deployment
 apiVersion: apps/v1
