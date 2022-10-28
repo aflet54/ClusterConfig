@@ -1,7 +1,7 @@
 ---
 ## The Infinite Wait
 apiVersion: apps/v1
-kind: deployment
+kind: Deployment
 metadata:
   name: infinite-sleep
 spec:
