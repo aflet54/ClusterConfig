@@ -18,11 +18,18 @@ spec:
         nfs:
           server: 192.168.1.68
           path: "/volume1/Data"
+      - name: pcv-configs
+        persistentVolumeClaim:
+          claimName: basic-jiva-csi-pvc
       containers:
       - name: migrate
         image: ubuntu
         command: ["/bin/bash", "-c"]
         args: ["sleep infinite"]
-      - name: mediaserver-volume
-        mountPath: "/config"
-        subPath: Config/Sonarr
+        volumeMounts:
+          - name: mediaserver-volume
+            mountPath: "/config"
+            subPath: Config/Sonarr
+          - name: pcv-configs
+            mountPath: "/pcv-config"
+            subPath: config
