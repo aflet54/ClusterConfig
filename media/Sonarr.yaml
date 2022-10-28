@@ -34,7 +34,7 @@ spec:
                     path: "/volume1/Data"
               - name: pcv-configs
                 persistentVolumeClaim:
-                claimName: basic-jiva-csi-pvc
+                    claimName: basic-jiva-csi-pvc
             containers:
               - name: sonarr
                 envFrom:

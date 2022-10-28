@@ -35,6 +35,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: basic-jiva-csi-pvc
+  namespace: mediaserver-system
 spec:
   storageClassName: openebs-jiva-csi-sc
   accessModes:
