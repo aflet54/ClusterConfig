@@ -3,10 +3,12 @@
 apiVersion: batch/v1
 kind: deployment
 metadata:
-  name: Infinite-Sleep
+  name: infinite-sleep
 spec:
-    replicas: 1
-spec:
+  replicas: 1
+  selector:
+        matchLabels:
+            app: tests
   template:
     spec:
       volumes:
