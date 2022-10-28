@@ -10,6 +10,9 @@ spec:
         matchLabels:
             app: tests
   template:
+    metadata:
+      labels:
+        app: tests
     spec:
       volumes:
       - name: oldnas-volume
