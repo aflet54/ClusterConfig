@@ -1,6 +1,6 @@
 ---
 ## The Infinite Wait
-apiVersion: batch/v1
+apiVersion: apps/v1
 kind: deployment
 metadata:
   name: infinite-sleep
