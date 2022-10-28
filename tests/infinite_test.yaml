@@ -1,0 +1,28 @@
+---
+## The Infinite Wait
+apiVersion: batch/v1
+kind: deployment
+metadata:
+  name: Infinite-Sleep
+spec:
+    replicas: 1
+spec:
+  template:
+    spec:
+      volumes:
+      - name: oldnas-volume
+        nfs:
+          server: 192.168.1.50
+          path: "/mnt/MainPool"
+      - name: mediaserver-volume
+        nfs:
+          server: 192.168.1.68
+          path: "/volume1/Data"
+      containers:
+      - name: migrate
+        image: ubuntu
+        command: ["/bin/bash", "-c"]
+        args: ["sleep infinite"]
+      - name: mediaserver-volume
+        mountPath: "/config"
+        subPath: Config/Sonarr
