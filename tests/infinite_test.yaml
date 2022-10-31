@@ -31,7 +31,7 @@ spec:
       - name: migrate
         image: ubuntu
         command: ["/bin/bash", "-c"]
-        args: ["sleep infinite"]
+        args: ["sleep infinity"]
         volumeMounts:
           - name: mediaserver-volume
             mountPath: "/config"
