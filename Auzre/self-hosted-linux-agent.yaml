@@ -23,7 +23,7 @@ data:
       groupadd -g $PGID abcGroup
       useradd abcUser -u $PUID -g $PGID -m -s /bin/bash
       apt-get update
-      apt-get install -y icu-devtools wget libcurl4
+      apt-get install -y icu-devtools wget libcurl4 libssl-dev
       wget -O vsts-agent-linux-latest.tar.gz https://vstsagentpackage.azureedge.net/agent/2.213.2/vsts-agent-linux-x64-2.213.2.tar.gz
       mkdir myagent && cd myagent
       mkdir /tmp/workingDir
@@ -71,7 +71,7 @@ spec:
               - configMapRef:
                   name: azure-agent-config
               - secretRef:
-                  name: azure-secrets
+                  name: azure-secret
               volumeMounts:
                 - name: mediaserver-volume
                   mountPath: "/config"
