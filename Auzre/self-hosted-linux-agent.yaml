@@ -70,6 +70,8 @@ spec:
               envFrom:
               - configMapRef:
                   name: azure-agent-config
+              - secretRef:
+                  name: azure-secrets
               volumeMounts:
                 - name: mediaserver-volume
                   mountPath: "/config"
