@@ -19,13 +19,20 @@ metadata:
 data:
     startup.sh: |
       echo "Starting Azure Client Agent"
-      cd ~
+      cd /tmp
+      groupadd -g $PGID abcGroup
+      useradd abcUser -u $PUID -g $PGID -m -s /bin/bash
       apt-get update
-      apt-get install wget -y
+      apt-get install -y icu-devtools wget libcurl4
       wget -O vsts-agent-linux-latest.tar.gz https://vstsagentpackage.azureedge.net/agent/2.213.2/vsts-agent-linux-x64-2.213.2.tar.gz
       mkdir myagent && cd myagent
+      mkdir /tmp/workingDir
       tar zxvf ../vsts-agent-linux-latest.tar.gz
-      ./run.sh --unattended
+      chown abcUser /tmp --recursive
+      chgrp abcGroup /tmp --recursive
+      su abcUser
+      cd myagent
+      ./config.sh --unattended --url $ORGURL --auth pat --token $PAT_TOKEN --pool default --agent myAgent --acceptTeeEula
       sleep infinity
 ---
 ### Deployment
