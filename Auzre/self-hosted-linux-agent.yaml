@@ -17,6 +17,11 @@ metadata:
 data:
     startup.sh: |
       echo "Current Time Delay $TIME_DELAY"
+      wget -O vsts-agent-linux-latest.tar.gz https://vstsagentpackage.azureedge.net/agent/2.213.2/vsts-agent-linux-x64-2.213.2.tar.gz
+      mkdir myagent && cd myagent
+      tar zxvf ../vsts-agent-linux-latest.tar.gz
+      
+      sleep infinity
 ---
 ### Deployment
 apiVersion: apps/v1
@@ -49,7 +54,7 @@ spec:
             - name: azure-agent
               image: ubuntu
               command: ["/bin/bash", "-c"]
-              args: ["filemigration-script/migrate.sh"]
+              args: ["azure-agent-startupscript/startup.sh"]
               envFrom:
               - configMapRef:
                   name: azure-agent-config
@@ -57,7 +62,6 @@ spec:
                 - name: mediaserver-volume
                   mountPath: "/config"
                   subPath: Config/azure-agent
-                
               resources:
                 requests: 
                   memory: "256Mi"
