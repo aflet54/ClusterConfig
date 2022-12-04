@@ -9,6 +9,15 @@ data:
     PUID: "1000"
     TZ: "Australia/Brisbane"
 ---
+### Config Map
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: azure-agent-startupscript
+data:
+    startup.sh: |
+      echo "Current Time Delay $TIME_DELAY"
+---
 ### Deployment
 apiVersion: apps/v1
 kind: Deployment
@@ -32,17 +41,23 @@ spec:
               nfs:
                 server: 192.168.1.68
                 path: "/volume1/Data"
+            - name: azure-agent-startupscript
+              configMap:
+                name: azure-agent-startupscript
+                defaultMode: 0777
           containers:
             - name: azure-agent
+              image: ubuntu
+              command: ["/bin/bash", "-c"]
+              args: ["filemigration-script/migrate.sh"]
               envFrom:
               - configMapRef:
                   name: azure-agent-config
-              image: "lscr.io/linuxserver/nzbget:latest"
-              imagePullPolicy: Always
               volumeMounts:
                 - name: mediaserver-volume
                   mountPath: "/config"
                   subPath: Config/azure-agent
+                
               resources:
                 requests: 
                   memory: "256Mi"
