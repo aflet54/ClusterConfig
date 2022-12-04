@@ -1,0 +1,50 @@
+### Application Config Map
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: azure-agent-config
+    namespace: azure
+data:
+    PGID: "1000"
+    PUID: "1000"
+    TZ: "Australia/Brisbane"
+---
+### Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: azure-agent-deployment
+  namespace: azure
+  labels:
+    app: azure-agent
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: azure-agent
+    template:
+        metadata:
+            labels:
+                app: azure-agent
+        spec:
+          volumes:
+            - name: mediaserver-volume
+              nfs:
+                server: 192.168.1.68
+                path: "/volume1/Data"
+          containers:
+            - name: azure-agent
+              envFrom:
+              - configMapRef:
+                  name: azure-agent-config
+              image: "lscr.io/linuxserver/nzbget:latest"
+              imagePullPolicy: Always
+              volumeMounts:
+                - name: mediaserver-volume
+                  mountPath: "/config"
+                  subPath: Config/azure-agent
+              resources:
+                requests: 
+                  memory: "256Mi"
+                limits:
+                  memory: "2048Mi"
