@@ -8,6 +8,7 @@ data:
     PGID: "1000"
     PUID: "1000"
     TZ: "Australia/Brisbane"
+    ORGURL: "https://dev.azure.com/ocnathor"
 ---
 ### Config Map
 apiVersion: v1
@@ -17,11 +18,14 @@ metadata:
     namespace: azure
 data:
     startup.sh: |
-      echo "Current Time Delay $TIME_DELAY"
+      echo "Starting Azure Client Agent"
+      cd ~
+      apt-get update
+      apt-get install wget -y
       wget -O vsts-agent-linux-latest.tar.gz https://vstsagentpackage.azureedge.net/agent/2.213.2/vsts-agent-linux-x64-2.213.2.tar.gz
       mkdir myagent && cd myagent
       tar zxvf ../vsts-agent-linux-latest.tar.gz
-      
+      ./run.sh --unattended
       sleep infinity
 ---
 ### Deployment
