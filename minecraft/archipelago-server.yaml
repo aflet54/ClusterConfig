@@ -60,7 +60,7 @@ spec:
                     protocol: TCP
                 volumeMounts:
                   - name: mediaserver-volume
-                    mountPath: "/config"
+                    mountPath: "/data"
                     subPath: Config/archipelago-minecraft
                   - name: mediaserver-volume
                     mountPath: "/cert-config"
