@@ -18,6 +18,7 @@ data:
     TYPE: "FORGE"
     VERSION: "1.19"
     FORGE_VERSION: "41.0.4"
+    RCON_PASSWORD: "andrew"
 ---
 ### Deployment
 apiVersion: apps/v1
