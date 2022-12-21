@@ -59,6 +59,9 @@ spec:
                   - name: arch-mine-port
                     containerPort: 25565
                     protocol: TCP
+                  - name: arch-mine-por-u
+                    containerPort: 25565
+                    protocol: UDP
                 volumeMounts:
                   - name: mediaserver-volume
                     mountPath: "/data"
@@ -84,6 +87,9 @@ spec:
   type: LoadBalancer
   ports:
     - port: 25565
-      targetPort: arch-mine-port 
+      targetPort: arch-mine-port
+    - port: 25565
+      protocol: UDP
+      targetPort: arch-mine-por-u
   selector:
     app: archipelago-minecraft
