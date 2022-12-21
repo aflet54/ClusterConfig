@@ -53,7 +53,7 @@ spec:
                 readinessProbe:
                     tcpSocket:
                         port: 25565
-                    initialDelaySeconds: 20
+                    initialDelaySeconds: 180
                     periodSeconds: 15
                 ports:  
                   - name: arch-mine-port
