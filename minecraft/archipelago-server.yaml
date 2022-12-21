@@ -87,6 +87,7 @@ spec:
   type: LoadBalancer
   ports:
     - port: 25565
+      protocol: TCP
       targetPort: arch-mine-port
     - port: 25565
       protocol: UDP
