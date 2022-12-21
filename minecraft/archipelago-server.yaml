@@ -1,0 +1,88 @@
+### Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+    name: archipelago-minecraft
+---
+### Config Map
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: archipelago-minecraft-config
+    namespace: archipelago-minecraft
+data:
+    PGID: "1000"
+    PUID: "1000"
+    TZ: "Australia/Brisbane"
+    EULA: "TRUE"
+    TYPE: "FORGE"
+    VERSION: "1.19"
+    FORGE_VERSION: "41.0.4"
+---
+### Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: archipelago-minecraft-deployment
+  namespace: archipelago-minecraft
+  labels:
+    app: archipelago-minecraft
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: archipelago-minecraft
+    template:
+        metadata:
+            labels:
+                app: archipelago-minecraft
+        spec:
+            volumes:
+              - name: mediaserver-volume
+                nfs:
+                    server: 192.168.1.68
+                    path: "/volume1/Data"
+            containers:
+              - name: archipelago-minecraft
+                image: "docker.io/itzg/minecraft-server:latest"
+                imagePullPolicy: Always
+                envFrom:
+                - configMapRef:
+                    name: archipelago-minecraft-config
+                readinessProbe:
+                    tcpSocket:
+                        port: 25565
+                    initialDelaySeconds: 20
+                    periodSeconds: 15
+                ports:  
+                  - name: archipelago-minecraft-port
+                    containerPort: 25565
+                    protocol: TCP
+                volumeMounts:
+                  - name: mediaserver-volume
+                    mountPath: "/config"
+                    subPath: Config/archipelago-minecraft
+                  - name: mediaserver-volume
+                    mountPath: "/cert-config"
+                    subPath: Config/SWAG
+                resources:
+                  requests: 
+                    memory: "256Mi"
+                  limits:
+                    memory: "2048Mi"
+---
+### Service
+apiVersion: v1 
+kind: Service
+metadata:
+  name: archipelago-minecraft-service
+  namespace: archipelago-minecraft
+  labels:
+    app: archipelago-minecraft
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 25565
+      targetPort: archipelago-minecraft-port 
+  selector:
+    app: archipelago-minecraft
