@@ -24,9 +24,9 @@ data:
       apt-get install -y wget xz-utils
       echo "Starting LinuxServers s6 Overlay"
       wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v$S6VERSION/s6-overlay-noarch.tar.xz
-      tar -C / -Jvxpf /tmp/s6-overlay-noarch.tar.xz
+      tar -C /setup/ -Jxpf /tmp/s6-overlay-noarch.tar.xz
       wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v$S6VERSION/s6-overlay-x86_64.tar.xz
-      tar -C / -Jvxpf /tmp/s6-overlay-x86_64.tar.xz
+      tar -C /setup/ -Jxpf /tmp/s6-overlay-x86_64.tar.xz
 ---
 ### Deployment
 apiVersion: apps/v1
@@ -74,19 +74,19 @@ spec:
                 - name: azure-agent-startupscript
                   mountPath: /azure-agent-startupscript
                 - name: init-dir
-                  mountPath: /init
+                  mountPath: /setup/init
                   subPath: init
                 - name: init-dir
-                  mountPath: /command
+                  mountPath: /setup/command
                   subPath: command
                 - name: init-dir
-                  mountPath: /package
+                  mountPath: /setup/package
                   subPath: package
                 - name: init-dir
-                  mountPath: /etc/s6-linux-init
+                  mountPath: /setup/etc/s6-linux-init
                   subPath: etc/s6-linux-init
                 - name: init-dir
-                  mountPath: /etc/s6-rc
+                  mountPath: /setup/etc/s6-rc
                   subPath: etc/s6-rc
               resources:
                 requests: 
@@ -97,6 +97,7 @@ spec:
             - name: azure-agent
               image: debian
               command: ["/bin/bash", "-c"]
+              args: ['sleep infinity']
               envFrom:
               - configMapRef:
                   name: azure-agent-config
