@@ -29,7 +29,6 @@ data:
       tar -C /setup/ -Jvxpf /tmp/s6-overlay-x86_64.tar.xz
       cd /setup
       ls -l
-      mv /setup/init /setup/initapp/init
       mkdir /setup/initapp
       mv /setup/init /setup/initapp/init
 ---
@@ -110,11 +109,8 @@ spec:
                   mountPath: /package
                   subPath: package
                 - name: init-dir
-                  mountPath: /etc/s6-linux-init
-                  subPath: etc/s6-linux-init
-                - name: init-dir
-                  mountPath: /etc/s6-rc
-                  subPath: etc/s6-rc
+                  mountPath: /etc/s6-overlay
+                  subPath: etc/s6-overlay
               resources:
                 requests: 
                   memory: "256Mi"
