@@ -24,9 +24,11 @@ data:
       apt-get install -y wget xz-utils
       echo "Starting LinuxServers s6 Overlay"
       wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v$S6VERSION/s6-overlay-noarch.tar.xz
-      tar -C /setup/ -Jxpf /tmp/s6-overlay-noarch.tar.xz
+      tar -C /setup/ -Jvxpf /tmp/s6-overlay-noarch.tar.xz
       wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v$S6VERSION/s6-overlay-x86_64.tar.xz
-      tar -C /setup/ -Jxpf /tmp/s6-overlay-x86_64.tar.xz
+      tar -C /setup/ -Jvxpf /tmp/s6-overlay-x86_64.tar.xz
+      cd /setup
+      ls -l
 ---
 ### Deployment
 apiVersion: apps/v1
@@ -75,7 +77,7 @@ spec:
                   mountPath: /azure-agent-startupscript
                 - name: init-dir
                   mountPath: /setup
-                  subPath: init
+                  subPath: 
               resources:
                 requests: 
                   memory: "256Mi"
