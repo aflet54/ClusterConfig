@@ -8,8 +8,7 @@ data:
     PGID: "1000"
     PUID: "1000"
     TZ: "Australia/Brisbane"
-    ORGURL: "https://dev.azure.com/ocnathor"
-    S6VERSION: "3.1.2.1"
+    AZP_URL: "https://dev.azure.com/ocnathor"
     TARGETARCH: "linux-x64"
 ---
 ### Config Map
@@ -21,7 +20,7 @@ metadata:
 data:
     startup.sh: |
       #!/bin/bash
-      echo "Starting Apt-Get Update and installing required apps"
+      echo "Starting Apt-Get Update and Generic Prep"
       echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
       apt-get update
       apt-get install -y -qq --no-install-recommends \
@@ -35,10 +34,9 @@ data:
       lsb-release \
       software-properties-common
       rm -rf /var/lib/apt/lists/*
-      echo "Downloading Azure Agent"
+      echo "Running Azure Specific Prep inv Azure Cli"
       curl -LS https://aka.ms/InstallAzureCLIDeb | bash
       echo "Finished installing Azure Cli"
-      sleep 10
       set -e
       if [ -z "$AZP_URL" ]; then
         echo 1>&2 "error: missing AZP_URL environment variable"
@@ -154,7 +152,7 @@ spec:
                 - name: azure-agent-startupscript
                   mountPath: /azure-agent-startupscript
                 - name: azure-dir
-                  mountPath: /azure
+                  mountPath: /azp
               resources:
                 requests: 
                   memory: "256Mi"
