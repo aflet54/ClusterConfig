@@ -20,7 +20,9 @@ metadata:
     namespace: azure
 data:
     startup.sh: |
+      #!/bin/bash
       echo "Starting Apt-Get Update and installing required apps"
+      echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
       apt-get update
       apt-get install -y --no-install-recommends \
       apt-transport-https \
@@ -35,8 +37,6 @@ data:
       rm -rf /var/lib/apt/lists/*
       echo "Downloading Azure Agent"
       curl -LS https://aka.ms/InstallAzureCLIDeb | bash
-      
-      #!/bin/bash
         set -e
         if [ -z "$AZP_URL" ]; then
           echo 1>&2 "error: missing AZP_URL environment variable"
@@ -139,8 +139,7 @@ spec:
           containers:
             - name: azure-agent
               image: debian
-              command: ["/bin/bash", "-c"]
-              args: ["/azure-agent-startupscript/startup.sh"]
+              command: ["/azure-agent-startupscript/startup.sh"]
               envFrom:
               - configMapRef:
                   name: azure-agent-config
