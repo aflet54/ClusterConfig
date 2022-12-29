@@ -56,7 +56,7 @@ spec:
                 name: azure-agent-startupscript
                 defaultMode: 0777
             - name: init-dir
-              mountPath: /tmp/s6-overlay
+              emptyDir: {}
           initContainers:
             - name: setup-s6-overlay
               image: debian
@@ -73,6 +73,8 @@ spec:
                   subPath: Config/azure-agent
                 - name: azure-agent-startupscript
                   mountPath: /azure-agent-startupscript
+                - name: init-dir
+                  mountPath: /init
               resources:
                 requests: 
                   memory: "256Mi"
