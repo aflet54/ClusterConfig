@@ -1,0 +1,95 @@
+### Application Config Map
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: azure-agent-config
+    namespace: azure
+data:
+    PGID: "1000"
+    PUID: "1000"
+    TZ: "Australia/Brisbane"
+    ORGURL: "https://dev.azure.com/ocnathor"
+    S6VERSION: "3.1.2.1"
+    TARGETARCH: "linux-x64"
+---
+### Config Map
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: azure-agent-startupscript
+    namespace: azure
+data:
+    startup.sh: |
+      echo "Starting Apt-Get Update and installing required apps"
+      apt-get update
+      apt-get install -y --no-install-recommends \
+      ca-certificates \
+      curl \
+      jq \
+      git \
+      iputils-ping \
+      libcurl4 \
+      libicu60 \
+      libunwind8 \
+      netcat \
+      libssl1.0
+      rm -rf /var/lib/apt/lists/*
+      echo "Downloading Azure Agent
+      curl -LS https://aka.ms/InstallAzureCLIDeb --output /azure/azure-start.sh
+      /azure/azure-start.sh
+---
+### Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: azure-agent-deployment
+  namespace: azure
+  labels:
+    app: azure-agent
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: azure-agent
+    template:
+        metadata:
+            labels:
+                app: azure-agent
+        spec:
+          volumes:
+            - name: mediaserver-volume
+              nfs:
+                server: 192.168.1.68
+                path: "/volume1/Data"
+            - name: azure-agent-startupscript
+              configMap:
+                name: azure-agent-startupscript
+                defaultMode: 0777
+            - name: azure-dir
+              emptyDir: {}
+          containers:
+            - name: azure-agent
+              image: debian
+              command: ["/bin/bash", "-c"]
+              args: ["/azure-agent-startupscript/startup.sh"]
+              envFrom:
+              - configMapRef:
+                  name: azure-agent-config
+              - secretRef:
+                  name: azure-secret
+              volumeMounts:
+                - name: mediaserver-volume
+                  mountPath: "/config"
+                  subPath: Config/azure-agent
+                - name: azure-agent-startupscript
+                  mountPath: /azure-agent-startupscript
+                - name: azure-dir
+                  mountPath: /azure
+              resources:
+                requests: 
+                  memory: "256Mi"
+                limits:
+                  memory: "2048Mi"
+              
+                  
+             

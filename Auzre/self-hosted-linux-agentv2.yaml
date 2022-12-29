@@ -10,6 +10,7 @@ data:
     TZ: "Australia/Brisbane"
     ORGURL: "https://dev.azure.com/ocnathor"
     S6VERSION: "3.1.2.1"
+    TARGETARCH: "linux-x64"
 ---
 ### Config Map
 apiVersion: v1
