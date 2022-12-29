@@ -19,7 +19,6 @@ metadata:
     namespace: azure
 data:
     startup.sh: |
-      sleep infinity
       echo "Starting Apt-Get Update and installing Basic apps"
       apt-get update
       apt-get install -y wget xz-utils
@@ -62,29 +61,6 @@ spec:
             - name: setup-s6-overlay
               image: debian
               command: ["/bin/bash", "-c"]
-              args: ["echo 'banana'"]
-              envFrom:
-              - configMapRef:
-                  name: azure-agent-config
-              - secretRef:
-                  name: azure-secret
-              volumeMounts:
-                - name: mediaserver-volume
-                  mountPath: "/config"
-                  subPath: Config/azure-agent
-                - name: azure-agent-startupscript
-                  mountPath: /azure-agent-startupscript
-                - name: init-dir
-                  mountPath: /init
-              resources:
-                requests: 
-                  memory: "256Mi"
-                limits:
-                  memory: "2048Mi"
-          containers:
-            - name: azure-agent
-              image: debian
-              command: ["/bin/bash", "-c"]
               args: ["/azure-agent-startupscript/startup.sh"]
               envFrom:
               - configMapRef:
@@ -99,6 +75,54 @@ spec:
                   mountPath: /azure-agent-startupscript
                 - name: init-dir
                   mountPath: /init
+                  subPath: init
+                - name: init-dir
+                  mountPath: /command
+                  subPath: command
+                - name: init-dir
+                  mountPath: /package
+                  subPath: package
+                - name: init-dir
+                  mountPath: /etc/s6-linux-init
+                  subPath: etc/s6-linux-init
+                - name: init-dir
+                  mountPath: /etc/s6-rc
+                  subPath: etc/s6-rc
+              resources:
+                requests: 
+                  memory: "256Mi"
+                limits:
+                  memory: "2048Mi"
+          containers:
+            - name: azure-agent
+              image: debian
+              command: ["/bin/bash", "-c"]
+              envFrom:
+              - configMapRef:
+                  name: azure-agent-config
+              - secretRef:
+                  name: azure-secret
+              volumeMounts:
+                - name: mediaserver-volume
+                  mountPath: "/config"
+                  subPath: Config/azure-agent
+                - name: azure-agent-startupscript
+                  mountPath: /azure-agent-startupscript
+                - name: init-dir
+                  mountPath: /init
+                  subPath: init
+                - name: init-dir
+                  mountPath: /command
+                  subPath: command
+                - name: init-dir
+                  mountPath: /package
+                  subPath: package
+                - name: init-dir
+                  mountPath: /etc/s6-linux-init
+                  subPath: etc/s6-linux-init
+                - name: init-dir
+                  mountPath: /etc/s6-rc
+                  subPath: etc/s6-rc
               resources:
                 requests: 
                   memory: "256Mi"
