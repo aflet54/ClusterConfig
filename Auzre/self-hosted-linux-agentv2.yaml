@@ -88,8 +88,7 @@ spec:
           containers:
             - name: azure-agent
               image: debian
-              command: ["/bin/bash", "-c"]
-              args: ['sleep infinity']
+              command: ["/init/init"]
               envFrom:
               - configMapRef:
                   name: azure-agent-config
