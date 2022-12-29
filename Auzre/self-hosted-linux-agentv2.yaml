@@ -100,7 +100,7 @@ spec:
                   mountPath: /azure-agent-startupscript
                 - name: init-dir
                   mountPath: /init
-                  subPath: /initapp
+                  subPath: initapp
                 - name: init-dir
                   mountPath: /command
                   subPath: command
