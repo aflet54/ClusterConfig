@@ -24,7 +24,7 @@ data:
       echo "Starting Apt-Get Update and installing required apps"
       echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
       apt-get update
-      apt-get install -y --no-install-recommends \
+      apt-get install -y -qq --no-install-recommends \
       apt-transport-https \
       apt-utils \
       ca-certificates \
