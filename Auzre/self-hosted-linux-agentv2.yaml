@@ -29,6 +29,7 @@ data:
       tar -C /setup/ -Jvxpf /tmp/s6-overlay-x86_64.tar.xz
       cd /setup
       ls -l
+      mv /setup/init /setup/initapp/init
 ---
 ### Deployment
 apiVersion: apps/v1
