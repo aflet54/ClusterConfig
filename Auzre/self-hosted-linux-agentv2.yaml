@@ -62,7 +62,7 @@ spec:
             - name: setup-s6-overlay
               image: debian
               command: ["/bin/bash", "-c"]
-              args: ["/azure-agent-startupscript/startup.sh"]
+              args: ["echo 'banana'"]
               envFrom:
               - configMapRef:
                   name: azure-agent-config
@@ -84,7 +84,8 @@ spec:
           containers:
             - name: azure-agent
               image: debian
-              command: ["/init"]
+              command: ["/bin/bash", "-c"]
+              args: ["/azure-agent-startupscript/startup.sh"]
               envFrom:
               - configMapRef:
                   name: azure-agent-config
