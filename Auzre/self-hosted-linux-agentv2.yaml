@@ -77,7 +77,6 @@ spec:
                   mountPath: /azure-agent-startupscript
                 - name: init-dir
                   mountPath: /setup
-                  subPath: 
               resources:
                 requests: 
                   memory: "256Mi"
