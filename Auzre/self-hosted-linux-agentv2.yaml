@@ -28,6 +28,7 @@ data:
       wget -O /tmp/s6-overlay-x86_64.tar.xz https://github.com/just-containers/s6-overlay/releases/download/v$S6VERSION/s6-overlay-x86_64.tar.xz
       tar -C / -Jxpf /tmp/s6-overlay-x86_64.tar.xz
       /init
+      sleep infinity
 ---
 ### Deployment
 apiVersion: apps/v1
@@ -58,7 +59,7 @@ spec:
                 defaultMode: 0777
           containers:
             - name: azure-agent
-              image: ubuntu
+              image: debian
               command: ["/bin/bash", "-c"]
               args: ["/azure-agent-startupscript/startup.sh"]
               envFrom:
