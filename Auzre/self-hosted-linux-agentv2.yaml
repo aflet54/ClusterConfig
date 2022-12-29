@@ -21,14 +21,12 @@ data:
     startup.sh: |
       echo "Starting Apt-Get Update and installing Basic apps"
       apt-get update
-      apt-get install -y icu-devtools wget libcurl4 libssl-dev xz-utils
+      apt-get install -y wget xz-utils
       echo "Starting LinuxServers s6 Overlay"
       wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v$S6VERSION/s6-overlay-noarch.tar.xz
-      tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz
+      tar -C / -Jvxpf /tmp/s6-overlay-noarch.tar.xz
       wget -P /tmp https://github.com/just-containers/s6-overlay/releases/download/v$S6VERSION/s6-overlay-x86_64.tar.xz
-      tar -C / -Jxpf /tmp/s6-overlay-x86_64.tar.xz
-      /init
-      sleep infinity
+      tar -C / -Jvxpf /tmp/s6-overlay-x86_64.tar.xz
 ---
 ### Deployment
 apiVersion: apps/v1
@@ -57,8 +55,10 @@ spec:
               configMap:
                 name: azure-agent-startupscript
                 defaultMode: 0777
-          containers:
-            - name: azure-agent
+            - name: init-dir
+              mountPath: /tmp/s6-overlay
+          initContainers:
+            - name: setup-s6-overlay
               image: debian
               command: ["/bin/bash", "-c"]
               args: ["/azure-agent-startupscript/startup.sh"]
@@ -73,9 +73,31 @@ spec:
                   subPath: Config/azure-agent
                 - name: azure-agent-startupscript
                   mountPath: /azure-agent-startupscript
-                  
               resources:
                 requests: 
                   memory: "256Mi"
                 limits:
                   memory: "2048Mi"
+          containers:
+            - name: azure-agent
+              image: debian
+              command: ["/init"]
+              envFrom:
+              - configMapRef:
+                  name: azure-agent-config
+              - secretRef:
+                  name: azure-secret
+              volumeMounts:
+                - name: mediaserver-volume
+                  mountPath: "/config"
+                  subPath: Config/azure-agent
+                - name: azure-agent-startupscript
+                  mountPath: /azure-agent-startupscript
+              resources:
+                requests: 
+                  memory: "256Mi"
+                limits:
+                  memory: "2048Mi"
+              
+                  
+             
