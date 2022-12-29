@@ -30,6 +30,8 @@ data:
       cd /setup
       ls -l
       mv /setup/init /setup/initapp/init
+      mkdir /setup/initapp
+      mv /setup/init /setup/initapp/init
 ---
 ### Deployment
 apiVersion: apps/v1
